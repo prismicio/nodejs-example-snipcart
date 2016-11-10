@@ -1,0 +1,17 @@
+extends ./layout.pug
+
+block body
+
+  div.product-list.container
+    for product in products
+      div.product-list-item
+        a(href=ctx.linkResolver(product))
+          - var image = product.getImage('product.image')
+          - var imageURL = image ? image.getView('listing').url : ""
+          - var price = product.getNumber('product.price')
+          
+          img.product-list-image(src=imageURL)
+          h3.product-list-title
+            != product.getStructuredText('product.title').asText() || 'Untitled'
+          p.product-list-price
+            != price ? "$" + price : ''

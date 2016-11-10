@@ -1,0 +1,100 @@
+{
+  "Main" : {
+    "uid" : {
+      "type" : "UID",
+      "fieldset" : "Unique Identifier",
+      "config" : {
+        "placeholder" : "UID"
+      }
+    },
+    "date" : {
+      "type" : "Date",
+      "fieldset" : "Date Added"
+    },
+    "title" : {
+      "type" : "StructuredText",
+      "fieldset" : "Product Title",
+      "config" : {
+        "single" : "heading1",
+        "placeholder" : "Title..."
+      }
+    },
+    "image" : {
+      "type" : "Image",
+      "fieldset" : "Product Image",
+      "config" : {
+        "constraint" : {
+          "width" : 640
+        },
+        "thumbnails" : [ {
+          "name" : "Listing",
+          "width" : 300,
+          "height" : 300
+        }, {
+          "name" : "Snipcart",
+          "width" : 50,
+          "height" : 50
+        } ]
+      }
+    },
+    "price" : {
+      "type" : "Number",
+      "fieldset" : "Price",
+      "config" : {
+        "label" : "USD",
+        "min" : 1,
+        "placeholder" : "Insert Price..."
+      }
+    },
+    "description" : {
+      "type" : "StructuredText",
+      "fieldset" : "Product Description",
+      "config" : {
+        "multi" : "paragraph,em,strong,hyperlink",
+        "placeholder" : "Description..."
+      }
+    }
+  },
+  "Related Products" : {
+    "relatedProducts" : {
+      "type" : "Group",
+      "fieldset" : "Link to related products",
+      "config" : {
+        "fields" : {
+          "link" : {
+            "type" : "Link",
+            "config" : {
+              "select" : "document",
+              "customtypes" : [ "product" ],
+              "placeholder" : "Link to a product"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Snipcart Data" : {
+    "snipcartDescription" : {
+      "type" : "Text",
+      "fieldset" : "Snipcart Data",
+      "config" : {
+        "label" : "Brief Description",
+        "placeholder" : "Brief Description..."
+      }
+    },
+    "snipcartWeight" : {
+      "type" : "Number",
+      "config" : {
+        "label" : "Weight (g)",
+        "min" : 1
+      }
+    },
+    "snipcartMaxQuantity" : {
+      "type" : "Number",
+      "config" : {
+        "label" : "Max Quantity",
+        "min" : 1
+      }
+    }
+  }
+}

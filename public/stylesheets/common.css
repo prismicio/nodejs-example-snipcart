@@ -1,0 +1,76 @@
+* {
+  -webkit-font-smoothing: antialiased;
+}
+::selection {
+  background: #FFF7C7; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #FFF7C7; /* Gecko Browsers */
+}
+
+/*
+ * Globals
+ */
+body {
+  padding: 0;
+  color: #72767b;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing : 0.4;
+  line-height: 28px;
+}
+a {
+  color: #72767B;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing : 0.35;
+  line-height: 28px;
+  text-decoration: none;
+}
+p a {
+  text-decoration: underline;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: Montserrat, sans-serif;
+}
+h1, h1 a {
+  font-size: 26px; 
+  font-weight: bold; 
+  color: #2F2F2F; 
+  line-height: 32px; 
+  letter-spacing : 0.5;
+  margin-bottom: 1rem;
+}
+h2, h2 a {
+  font-size: 13px; 
+  font-weight: normal; 
+  color: #AFAFAF; 
+  line-height: 13px; 
+  letter-spacing : 0.3;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+h3, h3 a {
+  font-size: 20px; 
+  font-weight: normal; 
+  color: #2F2F2F; 
+  line-height: 30px; 
+  letter-spacing : 0.5;
+  margin-bottom: 1rem;
+}
+p {
+  margin-bottom: 2rem;
+}
+pre, ul {
+  margin-bottom: 20px;
+}
+strong {
+  font-weight: bold;
+}
+em {
+  font-style: italic;
+}
+img {
+  max-width: 100%;
+}

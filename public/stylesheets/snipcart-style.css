@@ -1,0 +1,41 @@
+/* Snipcart pop-up styles */
+.snip-layout {
+  font-family: Montserrat, sans-serif;
+}
+.snip-layout .snip-header {
+  background-color: #F7F7F7;
+}
+.snip-layout .snip-header__title {
+  color: #4FD37E;
+}
+.snip-layout .snip-header__total {
+  background-color: transparent;
+  color: #2F2F2F;
+}
+.snip-layout .snip-ico.snip-ico--close {
+  color: #000000;
+}
+.snip-layout .snip-loader--bar {
+  background-color: #F7F7F7;
+}
+.snip-layout .snip-loader--bar::before {
+  background-color: #4FD37E;
+}
+.snip-layout .snip-btn--highlight {
+  background-color: #4FD37E;
+  color: #FFFFFF;
+}
+.snip-layout .snip-btn--highlight:hover {
+  background-color: #4FD37E;
+}
+.snip-layout .snip-flash .snip-flash__item {
+  color: #FFFFFF;
+  border-bottom: none;
+}
+.snip-layout .custom-snipcart-footer-text {
+  text-align: center;
+  margin: 10px;
+}
+.snip-layout .snip-footer {
+  background-color: #F7F7F7;
+}

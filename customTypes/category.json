@@ -1,0 +1,35 @@
+{
+  "Main" : {
+    "uid" : {
+      "type" : "UID",
+      "fieldset" : "Unique ID",
+      "config" : {
+        "placeholder" : "Unique ID..."
+      }
+    },
+    "title" : {
+      "type" : "StructuredText",
+      "fieldset" : "Category Title",
+      "config" : {
+        "placeholder" : "Category Title...",
+        "single" : "heading1"
+      }
+    },
+    "products" : {
+      "type" : "Group",
+      "fieldset" : "Linked Products",
+      "config" : {
+        "fields" : {
+          "link" : {
+            "type" : "Link",
+            "config" : {
+              "select" : "document",
+              "customtypes" : [ "product" ],
+              "placeholder" : "Link to a product"
+            }
+          }
+        }
+      }
+    }
+  }
+}

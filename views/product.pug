@@ -1,0 +1,35 @@
+extends ./layout.pug
+
+block body
+  div.container.product-details
+    - var image = productContent.getImage('product.image')
+    - var imageURL = image ? image.url : ""
+    - var price = productContent.getNumber('product.price')
+    
+    div.product-image
+      img(src=imageURL)
+    div.product-info
+      != productContent.getStructuredText('product.title').asHtml(ctx.linkResolver) || ""
+      p.product-price 
+        != price ? "$" + price : ''
+      div.product-description
+        != productContent.getStructuredText('product.description').asHtml(ctx.linkResolver) || ""
+      
+      include ./partials/add-to-cart-button.pug
+      
+  if relatedProducts.results_size > 0
+    div.container.recommended
+      h2 Recommended
+      div.recommended-wrapper
+        for relatedProduct in relatedProducts.results
+          - var relatedImage = relatedProduct.getImage('product.image')
+          - var relatedImageURL = relatedImage ? relatedImage.url : ""
+          - var relatedPrice = relatedProduct.getNumber('product.price')
+          
+          div.recommended-product
+            a(href=ctx.linkResolver(relatedProduct))
+              img.recommended-image(src=relatedImageURL)
+              p.recommended-title
+                != relatedProduct.getStructuredText('product.title').asText() || ""
+              p.recommended-price 
+                != relatedPrice ? "$" + relatedPrice : ''

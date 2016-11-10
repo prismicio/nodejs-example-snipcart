@@ -1,0 +1,37 @@
+{
+  "Main" : {
+    "title" : {
+      "type" : "StructuredText",
+      "config" : {
+        "placeholder" : "Document title...",
+        "single" : "heading1"
+      }
+    },
+    "logo" : {
+      "type" : "Image",
+      "fieldset" : "Site Logo"
+    },
+    "mainNav" : {
+      "type" : "Group",
+      "fieldset" : "Main Navigation",
+      "config" : {
+        "fields" : {
+          "label" : {
+            "type" : "Text",
+            "config" : {
+              "placeholder" : "Link label"
+            }
+          },
+          "link" : {
+            "type" : "Link",
+            "config" : {
+              "select" : "document",
+              "customtypes" : [ "category" ],
+              "placeholder" : "Link to a category"
+            }
+          }
+        }
+      }
+    }
+  }
+}

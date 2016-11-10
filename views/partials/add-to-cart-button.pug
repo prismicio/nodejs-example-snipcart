@@ -1,0 +1,10 @@
+- var itemID = productContent.uid
+- var itemName = productContent.getStructuredText('product.title') ? productContent.getStructuredText('product.title').asText() : "Unknown"
+- var itemImage = image ? image.getView('snipcart') : null
+- var itemImageURL = itemImage ? itemImage.url : null
+- var itemWeight = productContent.getNumber('product.snipcartWeight')
+- var itemDescription = productContent.getText('product.snipcartDescription')
+- var itemMaxQuantity = productContent.getNumber('product.snipcartMaxQuantity')
+- var itemURL = pageUrl
+
+a.button.add-to-cart.snipcart-add-item(href="#" data-item-id=itemID, data-item-name=itemName, data-item-price=price, data-item-image=itemImageURL, data-item-weight=itemWeight, data-item-url=itemURL, data-item-description=itemDescription, data-item-max-quantity=itemMaxQuantity) Add To Cart

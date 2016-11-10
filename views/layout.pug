@@ -1,0 +1,34 @@
+doctype html(lang='en')
+
+head
+  title Sample eCommerse Site
+  link(rel="stylesheet", href="/stylesheets/reset.css")
+  link(rel="stylesheet", href="/stylesheets/common.css")
+  link(rel="stylesheet", href="/stylesheets/style.css")
+  link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700', rel='stylesheet')
+  link(href='https://fonts.googleapis.com/css?family=Lato:400,700', rel='stylesheet')
+  meta(name="viewport", content="width=device-width, initial-scale=1")
+  script(src="//code.jquery.com/jquery-2.1.1.min.js")
+  script#snipcart(src='https://cdn.snipcart.com/scripts/2.0/snipcart.js', data-api-key=ctx.snipcartKey, data-autopop="false")
+  link(rel='stylesheet', href='https://cdn.snipcart.com/themes/2.0/base/snipcart.min.css', type='text/css')
+  link(rel="stylesheet", href="/stylesheets/snipcart-style.css")
+  script(src="/javascript/functions.js")
+  
+  // Required for Previews and Experiments
+  script
+    = ctx?"window.prismic = { endpoint: '" + ctx.endpoint + "' };":""
+  script(src="//static.cdn.prismic.io/prismic.min.js")
+  
+
+body
+  
+  include ./partials/header.pug
+  
+  block body
+    
+  include ./partials/footer.pug
+  
+  script#cart-content-text(type='text/template').
+    <div class="custom-snipcart-footer-text">
+    <p>This is only an example demo. You will not be charged for nor receive these amazing products.</p>
+    </div>

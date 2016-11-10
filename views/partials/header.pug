@@ -1,0 +1,38 @@
+header
+  - var logo = layoutContent.getImage('layout.logo')
+  - var logoURL = logo ? logo.url : ""
+  a(href="/")
+    if logo
+      img.logo(src=logoURL)
+    else
+      span.logo-text SiteLogo
+
+  div.utility-nav
+    ul
+      li 
+        a(href="#") Help
+        | &nbsp|&nbsp
+      li 
+        a(href="#") Contact Us
+        | &nbsp|&nbsp
+      li 
+        a(href="#" class="snipcart-checkout")
+          div.shopping-cart
+          div.snipcart-summary.cart-count
+            span.snipcart-total-items.cart-count-number
+
+nav.main-nav
+  div.added-to-cart
+    if productContent 
+      p 
+        != productContent.getStructuredText('product.title').asText() || "This product" 
+        |  has been added to your cart!
+  - var mainNav = layoutContent.getGroup('layout.mainNav').toArray()
+  ul
+    li
+      a(href="/") Everything
+    each mainLink in mainNav
+      - var mainURL = mainLink.getLink('link') ? mainLink.getLink('link').url(ctx.linkResolver) : "#"
+      li 
+        a(href=mainURL)
+          != mainLink.getText('label')
