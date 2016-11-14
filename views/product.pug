@@ -5,15 +5,17 @@ block body
     - var image = productContent.getImage('product.image')
     - var imageURL = image ? image.url : ""
     - var price = productContent.getNumber('product.price')
+    - var title = productContent.getStructuredText('product.title')
+    - var description = productContent.getStructuredText('product.description')
     
     div.product-image
       img(src=imageURL)
     div.product-info
-      != productContent.getStructuredText('product.title') ? productContent.getStructuredText('product.title').asHtml(ctx.linkResolver) : ""
+      != title ? title.asHtml(ctx.linkResolver) : ""
       p.product-price 
         != price ? "$" + price : ''
       div.product-description
-        != productContent.getStructuredText('product.description').asHtml(ctx.linkResolver) || ""
+        != description ? description.asHtml(ctx.linkResolver) : ""
       
       include ./partials/add-to-cart-button.pug
       
@@ -25,11 +27,12 @@ block body
           - var relatedImage = relatedProduct.getImage('product.image')
           - var relatedImageURL = relatedImage ? relatedImage.getView('listing').url : ""
           - var relatedPrice = relatedProduct.getNumber('product.price')
+          - var relatedTitle = relatedProduct.getStructuredText('product.title')
           
           div.recommended-product
             a(href=ctx.linkResolver(relatedProduct))
               img.recommended-image(src=relatedImageURL)
               p.recommended-title
-                != relatedProduct.getStructuredText('product.title') ? relatedProduct.getStructuredText('product.title').asText() : ""
+                != relatedTitle ? relatedTitle.asText() : ""
               p.recommended-price 
                 != relatedPrice ? "$" + relatedPrice : ''
