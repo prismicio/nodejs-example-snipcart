@@ -1,5 +1,5 @@
 header
-  - var logo = layoutContent.getImage('layout.logo')
+  - var logo = layoutContent ? layoutContent.getImage('layout.logo') : null
   - var logoURL = logo ? logo.url : ""
   a(href="/")
     if logo
@@ -25,13 +25,14 @@ nav.main-nav
   div.added-to-cart
     if productContent 
       p 
-        != productContent.getStructuredText('product.title').asText() || "This product" 
+        != productContent.getStructuredText('product.title') ? productContent.getStructuredText('product.title').asText() : "This product" 
         |  has been added to your cart!
-  - var mainNav = layoutContent.getGroup('layout.mainNav').toArray()
+  - var mainNav = layoutContent ? layoutContent.getGroup('layout.mainNav') : null
+  - var mainNavGroup = mainNav ? mainNav.toArray() : []
   ul
     li
       a(href="/") Everything
-    each mainLink in mainNav
+    each mainLink in mainNavGroup
       - var mainURL = mainLink.getLink('link') ? mainLink.getLink('link').url(ctx.linkResolver) : "#"
       li 
         a(href=mainURL)

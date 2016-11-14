@@ -12,6 +12,6 @@ block body
           
           img.product-list-image(src=imageURL)
           h3.product-list-title
-            != product.getStructuredText('product.title').asText() || 'Untitled'
+            != product.getStructuredText('product.title') ? product.getStructuredText('product.title').asText() : ''
           p.product-list-price
             != price ? "$" + price : ''
