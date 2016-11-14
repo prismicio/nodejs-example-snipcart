@@ -1,4 +1,4 @@
-## Sample Website with API-based CMS
+## Sample eCommerce Website with API-based CMS
 
 This is a sample Node.js eCommerce website with content managed with prismic.io (API-based CMS).
 
