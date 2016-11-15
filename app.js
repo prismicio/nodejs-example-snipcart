@@ -7,20 +7,6 @@ var app = require('./config');
 var configuration = require('./prismic-configuration');
 var PORT = app.get('port');
 
-// Returns a Promise
-function api(req, res) {
-  // So we can use this information in the views
-  res.locals.ctx = {
-    endpoint: configuration.apiEndpoint,
-    snipcartKey: configuration.snipcartKey,
-    linkResolver: configuration.linkResolver
-  };
-  return prismic.api(configuration.apiEndpoint, {
-    accessToken: configuration.accessToken,
-    req: req
-  });
-}
-
 function handleError(err, req, res) {
   if (err.status == 404) {
     res.status(404).send("404 not found");
@@ -33,14 +19,34 @@ app.listen(PORT, function() {
   console.log('Express server listening on port ' + PORT);
 });
 
-
-// For the preview functionality of prismic.io
-app.route('/preview').get(function(req, res) {
-  api(req, res).then(function(api) {
-    return prismic.preview(api, configuration.linkResolver, req, res);
+app.use((req, res, next) => {
+  prismic.api(configuration.apiEndpoint,{accessToken: configuration.accessToken, req: req})
+    .then((api) => {
+    req.prismic = {api: api}
+    res.locals.ctx = {
+      endpoint: configuration.apiEndpoint,
+      snipcartKey: configuration.snipcartKey,
+      linkResolver: configuration.linkResolver
+    }
+    next()
   }).catch(function(err) {
     handleError(err, req, res);
   });
+})
+
+
+// Query the site layout with every route 
+app.route('*').get((req, res, next) => {
+  req.prismic.api.getSingle("layout").then(function(layoutContent){
+    req.prismic.layoutContent = layoutContent
+    next()
+  });
+})
+
+
+// For the preview functionality of prismic.io
+app.route('/preview').get(function(req, res) {
+  return prismic.preview(req.prismic.api, configuration.linkResolver, req, res);
 });
 
 
@@ -52,44 +58,33 @@ app.route('/product/:uid').get(function(req, res) {
   
   // Define the UID from the url
   var uid = req.params.uid;
-  api(req, res).then(function(api) {
+  
+  // Define layout content
+  var layoutContent = req.prismic.layoutContent;
+  
+  // Query the product by its UID
+  req.prismic.api.getByUID('product', uid).then(function(productContent) {
     
-    // Query the layout
-    api.getSingle("layout").then(function(layoutContent) {
+    // Collect all the related product IDs for this product
+    var relatedIDs = Array();
+    var relatedProducts = productContent.getGroup('product.relatedProducts');
+    var relatedArray = relatedProducts ? relatedProducts.toArray() : null
+    if (relatedArray) {
+      relatedArray.forEach(function(relatedProduct){
+        relatedIDs.push( relatedProduct.getLink('link').id );
+      })
+    }
+    
+    //Query the related products by their IDs
+    req.prismic.api.getByIDs(relatedIDs).then(function(relatedProducts) {
       
-      // Query the product by its UID
-      api.getByUID('product', uid).then(function(productContent) {
-        
-        // Collect all the related product IDs for this product
-        var relatedIDs = Array();
-        var relatedProducts = productContent.getGroup('product.relatedProducts');
-        var relatedArray = relatedProducts ? relatedProducts.toArray() : null
-        if (relatedArray) {
-          relatedArray.forEach(function(relatedProduct){
-            relatedIDs.push( relatedProduct.getLink('link').id );
-          })
-        }
-        
-        //Query the related products by their IDs
-        api.getByIDs(relatedIDs).then(function(relatedProducts) {
-          
-          // Render the product page
-          res.render('product', {
-            layoutContent: layoutContent,
-            productContent: productContent,
-            relatedProducts: relatedProducts,
-            pageUrl: pageUrl
-          });
-          
-        // Catch and handle query errors
-        }).catch(function(err) {
-          handleError(err, req, res);
-        });
-      }).catch(function(err) {
-        handleError(err, req, res);
+      // Render the product page
+      res.render('product', {
+        layoutContent: layoutContent,
+        productContent: productContent,
+        relatedProducts: relatedProducts,
+        pageUrl: pageUrl
       });
-    }).catch(function(err) {
-      handleError(err, req, res);
     });
   });
 });
@@ -100,41 +95,28 @@ app.route('/category/:uid').get(function(req, res) {
   
   // Define the UID from the url
   var uid = req.params.uid;
-  api(req, res).then(function(api) {
+  
+  // Define layout content
+  var layoutContent = req.prismic.layoutContent;
+  
+  // Query the category by its UID
+  req.prismic.api.getByUID('category', uid).then(function(category) {
     
-    // Query the layout
-    api.getSingle("layout").then(function(layoutContent) {
+    // Define the category ID 
+    var categoryID = category.id;
+    
+    // Query all the products linked to the given category ID
+    req.prismic.api.query([
+      prismic.Predicates.at("document.type", "product"),
+      prismic.Predicates.at("my.product.categories.link", categoryID)
+      ], { orderings : '[my.product.date desc]'}
+    ).then(function(products) {
       
-      // Query the category by its UID
-      api.getByUID('category', uid).then(function(category) {
-        
-        // Collect all the product IDs in the category
-        var productIDs = Array();
-        var products = category.getGroup('category.products').toArray();
-        products.forEach(function(product){
-          if ( product.getLink('link') ) {
-            productIDs.push( product.getLink('link').id );
-          }
-        })
-        
-        //Query the products by their IDs
-        api.getByIDs( productIDs, { orderings : '[my.product.date desc]' } ).then(function(products) {
-          
-          // Render the listing page
-          res.render('listing', {
-            layoutContent: layoutContent,
-            products: products.results
-          });
-          
-        // Catch and handle query errors
-        }).catch(function(err) {
-          handleError(err, req, res);
-        });
-      }).catch(function(err) {
-        handleError(err, req, res);
+      // Render the listing page
+      res.render('listing', {
+        layoutContent: layoutContent,
+        products: products.results
       });
-    }).catch(function(err) {
-      handleError(err, req, res);
     });
   });
 });
@@ -142,29 +124,20 @@ app.route('/category/:uid').get(function(req, res) {
 
 // Route for the homepage
 app.route('/').get(function(req, res) {
-  api(req, res).then(function(api) {
-    
-    // Query the layout
-    api.getSingle("layout").then(function(layoutContent) {
-      
-      // Query all the products and order by their dates
-      api.query(
-        prismic.Predicates.at("document.type", "product"),
-        { orderings : '[my.product.date desc]'}
-      ).then(function(products) {
-        
-        // Render the listing page
-        res.render('listing', {
-          layoutContent: layoutContent,
-          products: products.results
-        });
-        
-      // Catch and handle query errors
-      }).catch(function(err) {
-        handleError(err, req, res);
-      });
-    }).catch(function(err) {
-      handleError(err, req, res);
+  
+  // Define layout content
+  var layoutContent = req.prismic.layoutContent;
+  
+  // Query all the products and order by their dates
+  req.prismic.api.query(
+    prismic.Predicates.at("document.type", "product"),
+    { orderings : '[my.product.date desc]'}
+  ).then(function(products) {
+
+    // Render the listing page
+    res.render('listing', {
+      layoutContent: layoutContent,
+      products: products.results
     });
   });
 });
