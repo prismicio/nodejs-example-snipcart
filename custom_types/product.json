@@ -19,6 +19,24 @@
         "placeholder" : "Title..."
       }
     },
+    "categories" : {
+      "type" : "Group",
+      "fieldset" : "Categories",
+      "config" : {
+        "fields" : {
+          "link" : {
+            "type" : "Link",
+            "config" : {
+              "select" : "document",
+              "customtypes" : [ "category" ],
+              "placeholder" : "Link to a category"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Product Info" : {
     "image" : {
       "type" : "Image",
       "fieldset" : "Product Image",

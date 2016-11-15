@@ -1,0 +1,16 @@
+[{
+  "id": "category",
+  "name": "Category",
+  "repeatable": true,
+  "value": "category.json"
+}, {
+  "id": "layout",
+  "name": "Layout",
+  "repeatable": false,
+  "value": "layout.json"
+}, {
+  "id": "product",
+  "name": "Product",
+  "repeatable": true,
+  "value": "product.json"
+}]

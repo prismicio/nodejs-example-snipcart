@@ -1,0 +1,19 @@
+{
+  "Main" : {
+    "uid" : {
+      "type" : "UID",
+      "fieldset" : "Unique ID",
+      "config" : {
+        "placeholder" : "Unique ID..."
+      }
+    },
+    "title" : {
+      "type" : "StructuredText",
+      "fieldset" : "Category Title",
+      "config" : {
+        "placeholder" : "Category Title...",
+        "single" : "heading1"
+      }
+    }
+  }
+}
