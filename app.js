@@ -15,6 +15,13 @@ function handleError(err, req, res) {
   }
 }
 
+function render404(req, res) {
+  res.status(404);
+  res.render('404', {
+    layoutContent: req.prismic.layoutContent
+  });
+}
+
 app.listen(PORT, function() {
   console.log('Express server listening on port ' + PORT);
 });
@@ -75,15 +82,13 @@ app.route('/product/:uid').get(function(req, res) {
     
     // Render the 404 page if this uid is found
     if (!productContent) {
-      res.render('404', {
-        layoutContent: req.prismic.layoutContent
-      });
+      render404(req, res);
     }
     
     // Collect all the related product IDs for this product
     var relatedProducts = productContent.getGroup('product.relatedProducts');
     var relatedArray = relatedProducts ? relatedProducts.toArray() : []
-    const relatedIDs = relatedArray.map((relatedProduct) => relatedProduct.getLink('link').id);
+    var relatedIDs = relatedArray.map((relatedProduct) => relatedProduct.getLink('link').id);
     
     //Query the related products by their IDs
     req.prismic.api.getByIDs(relatedIDs).then(function(relatedProducts) {
@@ -111,9 +116,7 @@ app.route('/category/:uid').get(function(req, res) {
     
     // Render the 404 page if this uid is found
     if (!category) {
-      res.render('404', {
-        layoutContent: req.prismic.layoutContent
-      });
+      render404(req, res);
     }
     
     // Define the category ID 
@@ -156,8 +159,6 @@ app.route('/').get(function(req, res) {
 
 // Route that catches any other url and renders the 404 page
 app.route('/:url').get(function(req, res) {
-  res.render('404', {
-    layoutContent: req.prismic.layoutContent
-  });
+  render404(req, res);
 });
 
