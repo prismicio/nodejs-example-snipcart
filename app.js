@@ -17,13 +17,11 @@ function handleError(err, req, res) {
 
 function render404(req, res) {
   res.status(404);
-  res.render('404', {
-    layoutContent: req.prismic.layoutContent
-  });
+  res.render('404');
 }
 
 app.listen(PORT, function() {
-  console.log('Express server listening on port ' + PORT);
+  console.log('Point your browser to: http://localhost:' + PORT);
 });
 
 app.use((req, res, next) => {
@@ -56,7 +54,7 @@ app.route('*').get((req, res, next) => {
     }
     
     // Define the layout content
-    req.prismic.layoutContent = layoutContent
+    res.locals.layoutContent = layoutContent
     next()
   })
 });
@@ -95,7 +93,6 @@ app.route('/product/:uid').get(function(req, res) {
       
       // Render the product page
       res.render('product', {
-        layoutContent: req.prismic.layoutContent,
         productContent: productContent,
         relatedProducts: relatedProducts,
         pageUrl: pageUrl
@@ -131,7 +128,6 @@ app.route('/category/:uid').get(function(req, res) {
       
       // Render the listing page
       res.render('listing', {
-        layoutContent: req.prismic.layoutContent,
         products: products.results
       });
     });
@@ -150,7 +146,6 @@ app.route('/').get(function(req, res) {
 
     // Render the listing page
     res.render('listing', {
-      layoutContent: req.prismic.layoutContent,
       products: products.results
     });
   });
