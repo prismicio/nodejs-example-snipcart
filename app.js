@@ -21,7 +21,7 @@ function render404(req, res) {
 }
 
 app.listen(PORT, function() {
-  console.log('Point your browser to: http://localhost:' + PORT);
+  console.log('Point your browser to http://localhost:' + PORT);
 });
 
 app.use((req, res, next) => {
@@ -50,7 +50,7 @@ app.route('*').get((req, res, next) => {
     
     // Give an error if no layout custom type is found
     if (!layoutContent) {
-      handleError({status: 500, message: "No Layout custom type was found."}, req, res);
+      handleError({status: 500, message: "No Layout document was found."}, req, res);
     }
     
     // Define the layout content
