@@ -127,9 +127,7 @@ app.route('/category/:uid').get(function(req, res) {
     ).then(function(products) {
       
       // Render the listing page
-      res.render('listing', {
-        products: products.results
-      });
+      res.render('listing', {products: products.results});
     });
   });
 });
@@ -145,9 +143,7 @@ app.route('/').get(function(req, res) {
   ).then(function(products) {
 
     // Render the listing page
-    res.render('listing', {
-      products: products.results
-    });
+    res.render('listing', {products: products.results});
   });
 });
 
