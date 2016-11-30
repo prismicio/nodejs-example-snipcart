@@ -86,7 +86,10 @@ app.route('/product/:uid').get(function(req, res) {
     // Collect all the related product IDs for this product
     var relatedProducts = productContent.getGroup('product.relatedProducts');
     var relatedArray = relatedProducts ? relatedProducts.toArray() : []
-    var relatedIDs = relatedArray.map((relatedProduct) => relatedProduct.getLink('link').id);
+    var relatedIDs = relatedArray.map((relatedProduct) => {
+      var link = relatedProduct.getLink('link');
+      return link ? link.id : null;
+    }).filter((id) => id != null);
     
     //Query the related products by their IDs
     req.prismic.api.getByIDs(relatedIDs).then(function(relatedProducts) {
