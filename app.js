@@ -2,18 +2,10 @@
 /**
  * Module dependencies.
  */
-var prismic = require('prismic-nodejs');
+var Prismic = require('prismic-nodejs');
 var app = require('./config');
-var configuration = require('./prismic-configuration');
 var PORT = app.get('port');
-
-function handleError(err, req, res) {
-  if (err.status == 404) {
-    res.status(404).send("404 not found");
-  } else {
-    res.status(500).send("Error 500: " + err.message);
-  }
-}
+var PConfig = require('./prismic-configuration');
 
 function render404(req, res) {
   res.status(404);
@@ -25,44 +17,44 @@ app.listen(PORT, function() {
 });
 
 app.use((req, res, next) => {
-  prismic.api(configuration.apiEndpoint,{accessToken: configuration.accessToken, req: req})
-    .then((api) => {
-      req.prismic = {api: api}
-      res.locals.ctx = {
-      endpoint: configuration.apiEndpoint,
-      snipcartKey: configuration.snipcartKey,
-      linkResolver: configuration.linkResolver
-    }
-    next()
+  Prismic.api(PConfig.apiEndpoint,{accessToken: PConfig.accessToken, req: req})
+  .then((api) => {
+    req.prismic = {api: api};
+    res.locals.ctx = {
+      endpoint: PConfig.apiEndpoint,
+      snipcartKey: PConfig.snipcartKey,
+      linkResolver: PConfig.linkResolver
+    };
+    next();
   }).catch(function(err) {
     if (err.status == 404) {
-      res.status(404).send("There was a problem connecting to your API, please check your configuration file for errors.");
+      res.status(404).send('There was a problem connecting to your API, please check your configuration file for errors.');
     } else {
-      res.status(500).send("Error 500: " + err.message);
+      res.status(500).send('Error 500: ' + err.message);
     }
   });
-})
+});
 
 
 // Query the site layout with every route 
 app.route('*').get((req, res, next) => {
-  req.prismic.api.getSingle("layout").then(function(layoutContent){
+  req.prismic.api.getSingle('layout').then(function(layoutContent){
     
     // Give an error if no layout custom type is found
     if (!layoutContent) {
-      handleError({status: 500, message: "No Layout document was found."}, req, res);
+      res.status(500).send('No Layout document was found.');
     }
     
     // Define the layout content
-    res.locals.layoutContent = layoutContent
-    next()
-  })
+    res.locals.layoutContent = layoutContent;
+    next();
+  });
 });
 
 
 // For the preview functionality of prismic.io
 app.route('/preview').get(function(req, res) {
-  return prismic.preview(req.prismic.api, configuration.linkResolver, req, res);
+  return Prismic.preview(req.prismic.api, PConfig.linkResolver, req, res);
 });
 
 
@@ -85,7 +77,7 @@ app.route('/product/:uid').get(function(req, res) {
     
     // Collect all the related product IDs for this product
     var relatedProducts = productContent.getGroup('product.relatedProducts');
-    var relatedArray = relatedProducts ? relatedProducts.toArray() : []
+    var relatedArray = relatedProducts ? relatedProducts.toArray() : [];
     var relatedIDs = relatedArray.map((relatedProduct) => {
       var link = relatedProduct.getLink('link');
       return link ? link.id : null;
@@ -124,8 +116,8 @@ app.route('/category/:uid').get(function(req, res) {
     
     // Query all the products linked to the given category ID
     req.prismic.api.query([
-      prismic.Predicates.at("document.type", "product"),
-      prismic.Predicates.at("my.product.categories.link", categoryID)
+        Prismic.Predicates.at('document.type', 'product'),
+        Prismic.Predicates.at('my.product.categories.link', categoryID)
       ], { orderings : '[my.product.date desc]'}
     ).then(function(products) {
       
@@ -141,7 +133,7 @@ app.route('/').get(function(req, res) {
   
   // Query all the products and order by their dates
   req.prismic.api.query(
-    prismic.Predicates.at("document.type", "product"),
+    Prismic.Predicates.at('document.type', 'product'),
     { orderings : '[my.product.date desc]'}
   ).then(function(products) {
 
