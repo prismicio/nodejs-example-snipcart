@@ -1,9 +1,8 @@
 header
-  - var logo = layoutContent ? layoutContent.getImage('layout.logo') : null
-  - var logoURL = logo ? logo.url : ""
+  - var logo = layoutContent ? layoutContent.data.logo.url : null
   a(href="/")
     if logo
-      img.logo(src=logoURL)
+      img.logo(src=logo)
     else
       span.logo-text SiteLogo
 
@@ -24,16 +23,15 @@ header
 nav.main-nav
   div.added-to-cart
     if productContent 
-      p 
-        != productContent.getStructuredText('product.title') ? productContent.getStructuredText('product.title').asText() : "This product" 
+      p
+        != productContent.data.title != "" ? PrismicDOM.RichText.asText(productContent.data.title) : "This product" 
         |  has been added to your cart!
-  - var mainNav = layoutContent ? layoutContent.getGroup('layout.mainNav') : null
-  - var mainNavGroup = mainNav ? mainNav.toArray() : []
+  - var mainNav = layoutContent ? layoutContent.data.mainNav : []
   ul
     li
       a(href="/") Everything
-    each mainLink in mainNavGroup
-      - var mainURL = mainLink.getLink('link') ? mainLink.getLink('link').url(ctx.linkResolver) : "#"
+    each mainLink in mainNav
+      - var mainURL = PrismicDOM.Link.url(mainLink.link, ctx.linkResolver)
       li 
         a(href=mainURL)
-          != mainLink.getText('label')
+          != mainLink.label

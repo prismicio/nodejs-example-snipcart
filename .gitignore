@@ -13,7 +13,6 @@ results
 
 npm-debug.log
 node_modules
-development
 
 .idea
-
+/package-lock.json

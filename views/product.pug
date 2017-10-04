@@ -2,20 +2,17 @@ extends ./layout.pug
 
 block body
   div.container.product-details
-    - var image = productContent.getImage('product.image')
-    - var imageURL = image ? image.url : ""
-    - var price = productContent.getNumber('product.price')
-    - var title = productContent.getStructuredText('product.title')
-    - var description = productContent.getStructuredText('product.description')
+    - var imageURL = productContent.data.image.url
+    - var price = productContent.data.price
     
     div.product-image
       img(src=imageURL)
     div.product-info
-      != title ? title.asHtml(ctx.linkResolver) : ""
+      != PrismicDOM.RichText.asHtml(productContent.data.title)
       p.product-price 
         != price ? "$" + price : ''
       div.product-description
-        != description ? description.asHtml(ctx.linkResolver) : ""
+        != PrismicDOM.RichText.asHtml(productContent.data.description)
       
       include ./partials/add-to-cart-button.pug
       
@@ -24,15 +21,13 @@ block body
       h2 Recommended
       div.recommended-wrapper
         for relatedProduct in relatedProducts.results
-          - var relatedImage = relatedProduct.getImage('product.image')
-          - var relatedImageURL = relatedImage ? relatedImage.getView('listing').url : ""
-          - var relatedPrice = relatedProduct.getNumber('product.price')
-          - var relatedTitle = relatedProduct.getStructuredText('product.title')
+          - var relatedImageURL = relatedProduct.data.image.Listing.url
+          - var relatedPrice = relatedProduct.data.price
           
           div.recommended-product
             a(href=ctx.linkResolver(relatedProduct))
               img.recommended-image(src=relatedImageURL)
               p.recommended-title
-                != relatedTitle ? relatedTitle.asText() : ""
+                != PrismicDOM.RichText.asText(relatedProduct.data.title)
               p.recommended-price 
                 != relatedPrice ? "$" + relatedPrice : ''
