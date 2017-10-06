@@ -6,12 +6,11 @@ block body
     for product in products
       div.product-list-item
         a(href=ctx.linkResolver(product))
-          - var image = product.getImage('product.image')
-          - var imageURL = image ? image.getView('listing').url : ""
-          - var price = product.getNumber('product.price')
+          - var imageURL = product.data.image.Listing.url
+          - var price = product.data.price
           
           img.product-list-image(src=imageURL)
           h3.product-list-title
-            != product.getStructuredText('product.title') ? product.getStructuredText('product.title').asText() : ''
+            != PrismicDOM.RichText.asText(product.data.title)
           p.product-list-price
             != price ? "$" + price : ''

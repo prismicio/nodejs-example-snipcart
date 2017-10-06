@@ -4,7 +4,7 @@ This is a sample Node.js eCommerce website with content managed with prismic.io 
 
 #### Getting started
 
-Read [this guide](https://prismic.io/docs/examples/ecommerce#?lang=node) for instructions to create your repository and use this sample eCommerce site.
+Read [this guide](https://intercom.help/prismicio/examples/nodejs-samples/sample-ecommerce-site-with-snipcart-in-nodejs) for instructions to create your repository and use this sample eCommerce site.
 
 #### Deploy your Node.js website
 
@@ -47,7 +47,7 @@ $ heroku open
 
 This software is licensed under the Apache 2 license, quoted below.
 
-Copyright 2016 Zengularity (http://www.zengularity.com).
+Copyright 2017 Prismic.io (http://www.prismic.io).
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
 
