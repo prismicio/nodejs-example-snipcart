@@ -102,7 +102,7 @@ app.route('/product/:uid').get(function(req, res) {
     var relatedIDs = relatedProducts.map((relatedProduct) => {
       var link = relatedProduct.link;
       return link ? link.id : null;
-    }).filter((id) => id !== null);
+    }).filter((id) => id !== null && id !== undefined);
     
     //Query the related products by their IDs
     req.prismic.api.getByIDs(relatedIDs).then(function(relatedProducts) {
