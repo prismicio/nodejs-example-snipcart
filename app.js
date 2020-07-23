@@ -12,7 +12,7 @@ const PORT = app.get('port');
 
 function render404(req, res) {
   res.status(404);
-  res.render('404');
+  res.render("./error_handlers/404");
 }
 
 app.listen(PORT, () => {
