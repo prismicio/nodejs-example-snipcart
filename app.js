@@ -82,20 +82,6 @@ app.get('/preview', asyncHandler(async (req, res, next) => {
   next();
 }))
 
-// app.get('/preview', (req, res) => {
-//   const token = req.query.token;
-//   if (token) {
-//     req.prismic.api.previewSession(token, PrismicConfig.linkResolver, '/')
-//     .then((url) => {
-//       res.redirect(302, url);
-//     }).catch((err) => {
-//       res.status(500).send(`Error 500 in preview: ${err.message}`);
-//     });
-//   } else {
-//     res.send(400, 'Missing token from querystring');
-//   }
-// });
-
 /*
  * Route for the product pages
  */
