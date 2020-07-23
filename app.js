@@ -7,6 +7,7 @@ const Prismic = require('prismic-javascript');
 const PrismicDOM = require('prismic-dom');
 const app = require('./config');
 const PrismicConfig = require('./prismic-configuration');
+const asyncHandler = require ("./utils/async-handler");
 const PORT = app.get('port');
 
 function render404(req, res) {
@@ -64,19 +65,36 @@ app.route('*').get((req, res, next) => {
 /*
  * Preconfigured prismic preview
  */
-app.get('/preview', (req, res) => {
-  const token = req.query.token;
-  if (token) {
-    req.prismic.api.previewSession(token, PrismicConfig.linkResolver, '/')
-    .then((url) => {
-      res.redirect(302, url);
-    }).catch((err) => {
-      res.status(500).send(`Error 500 in preview: ${err.message}`);
-    });
-  } else {
+
+ // Prismic preview route
+app.get('/preview', asyncHandler(async (req, res, next) => {
+  const { token, documentId } = req.query;
+  if(token){
+    try{
+      const redirectUrl = (await req.prismic.api.getPreviewResolver(token, documentId).resolve(PrismicConfig.linkResolver, '/'));
+      res.redirect(302, redirectUrl);
+    }catch(e){
+      res.status(500).send(`Error 500 in preview`);
+    }
+  }else{
     res.send(400, 'Missing token from querystring');
   }
-});
+  next();
+}))
+
+// app.get('/preview', (req, res) => {
+//   const token = req.query.token;
+//   if (token) {
+//     req.prismic.api.previewSession(token, PrismicConfig.linkResolver, '/')
+//     .then((url) => {
+//       res.redirect(302, url);
+//     }).catch((err) => {
+//       res.status(500).send(`Error 500 in preview: ${err.message}`);
+//     });
+//   } else {
+//     res.send(400, 'Missing token from querystring');
+//   }
+// });
 
 /*
  * Route for the product pages
